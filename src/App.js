@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+//import "../node_modules/bootstrap/dist/css/bootstrap.min.css";//Bootstrap CDN
+//import 'bootstrap/dist/js/bootstrap.bundle.min.js';//Bootstrap CDN
+//import './css/main.css';
+
+import Navbar from './pages/layout/Navbar';
+import Footer from './pages/layout/Footer';
+import NotFound from './pages/layout/404';
+
+//import Home from './pages/sub_page/Home'
+import Video from './pages/sub_page/Video'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <Router>
+        {/* <Navbar /> */}
+        <Routes>
+
+          <Route exact path="/" element={<Video />} />
+
+          {/* 404 Not Found*/}
+          <Route path='*' element={<NotFound />} />
+        </Routes>
+        {/* <Footer /> */}
+      </Router>
+
     </div>
   );
 }
