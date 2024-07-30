@@ -7,7 +7,7 @@ import Navbar from './pages/layout/Navbar';
 import Footer from './pages/layout/Footer';
 import NotFound from './pages/layout/404';
 
-//import Home from './pages/sub_page/Home'
+import Home from './pages/sub_page/Home'
 import Video from './pages/sub_page/Video'
 
 function App() {
@@ -19,6 +19,7 @@ function App() {
         <Routes>
 
           <Route exact path="/" element={<Video />} />
+          <Route exact path="/home" element={<Home />} />
 
           {/* 404 Not Found*/}
           <Route path='*' element={<NotFound />} />
