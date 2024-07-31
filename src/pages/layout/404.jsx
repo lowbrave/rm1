@@ -10,7 +10,6 @@ function NotFound() {
         justifyContent: 'center',
         height: '100vh',
         textAlign: 'center',
-        backgroundColor: '#f8f8f8',
     };
 
     const headingStyle = {
@@ -35,8 +34,8 @@ function NotFound() {
     return (
         <div style={containerStyle}>
             <h1 style={headingStyle}>404</h1>
-            <p style={textStyle}>Oops! The page you're looking for does not exist.</p>
-            <button className="btn btn-danger" onClick={redirect}>Back to Home Page</button>
+            <p style={textStyle}>哎呀！您要尋找的頁面不存在。</p>
+            <button className="btn btn-danger" onClick={redirect}>返回首頁</button>
         </div>
     );
 }

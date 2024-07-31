@@ -14,7 +14,7 @@ function App() {
   return (
     <div className="App">
 
-      <Router>
+      <Router basename="/rm1">
         {/* <Navbar /> */}
         <Routes>
 
@@ -24,7 +24,7 @@ function App() {
           {/* 404 Not Found*/}
           <Route path='*' element={<NotFound />} />
         </Routes>
-        {/* <Footer /> */}
+        <Footer />
       </Router>
 
     </div>
