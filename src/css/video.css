@@ -13,12 +13,6 @@
   box-sizing: border-box;
 }
 
-body {
-  background-color: rgba(79, 84, 92) !important;
-  color: #ffffff !important;
-  font-family: 'Roboto Condensed', sans-serif;
-}
-
 main {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -256,7 +250,8 @@ main .movie:hover .overview {
   font-size: 24px;
   text-align: center;
   animation: anim-btn 3s ease-in-out infinite;
-                border: 1px dotted #3F51B5;
+  border: 1px dotted #3F51B5;
+  margin-inline: 5px;
 }
 
 h1 {
@@ -330,4 +325,19 @@ h1 {
     -webkit-transform: scale(50) rotate(45deg);
     opacity: 0;
   }
+}
+
+/* Toast */
+/* https://fkhadra.github.io/react-toastify/how-to-style/ */
+.Toastify__toast--warning {
+  background: #FFE8BC !important;
+}
+
+.Toastify__toast--error {
+  background: #FCA7A9 !important;
+}
+
+.toastBody {
+  font-size: 1rem !important;
+  font-weight: 1000;
 }

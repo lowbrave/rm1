@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import movieData from '../videos.json';
 import '../../css/material-kit.css';
 import '../../css/video.css';
@@ -24,23 +24,118 @@ export default function Video() {
         disableInteractions();
         const interval = setInterval(() => {
             setCurrentTime(new Date().getTime());
-        }, 1000);
-
+        }, 5000);
         return () => clearInterval(interval);
     }, []);
+
+    useEffect(() => {
+        let openedWindow;
+        let is_clicked = false;
+        $(document).on("click", ".movie_list_item", function (event) {
+            const childHref = event.target.getAttribute('data-href');
+            const childTitle = event.target.getAttribute('data-movie');
+            const movie = findMovieByKey("title", childTitle, movieData);
+            if (movie && !is_clicked) {
+                is_clicked = true;
+                document.querySelector('html').style.pointerEvents = 'none';
+                var message =
+                    <div>
+                        即將跳轉頁面 <br />劇集：{movie.title} {event.target.text}
+                    </div>
+                toast.info(message, {
+                    autoClose: 1500,
+                    onClose: () => {
+                        is_clicked = false
+                        document.querySelector('html').style.pointerEvents = 'all'
+                        var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+                            navigator.userAgent &&
+                            navigator.userAgent.indexOf('CriOS') === -1 &&
+                            navigator.userAgent.indexOf('FxiOS') === -1;
+                        if (isSafari === true) {
+                            if (openedWindow && !openedWindow.closed) {
+                                openedWindow.focus();
+                                openedWindow.location.href = childHref;
+                            } else {
+                                openedWindow = window.open(childHref, "_self");
+                            }
+                        } else {
+                            if (openedWindow && !openedWindow.closed) {
+                                openedWindow.focus();
+                                openedWindow.location.href = childHref;
+                            } else {
+                                openedWindow = window.open(childHref, '_blank');
+                            }
+                        }
+                    },
+                });
+            }
+        });
+        function closeAllOpenedWindows() {
+            let openedWindows = [];
+
+            // Find all opened windows
+            for (let i = 0; i < window.length; i++) {
+                const win = window[i];
+                if (win && win.open && !win.closed && win !== window.self) {
+                    openedWindows.push(win);
+                }
+            }
+
+            // Close each opened window
+            openedWindows.forEach((win) => {
+                win.close();
+            });
+        }
+        var count = 0
+        document.onvisibilitychange = function () {
+            switch (document.visibilityState) {
+                case 'hidden':
+                    count = count + 1
+                    // 使用者不在頁面上時要做的事……
+                    break;
+                case 'visible':
+                    closeAllOpenedWindows();
+                    try {
+                        if (openedWindow && !openedWindow.closed) {
+                            openedWindow.focus();
+                            openedWindow.close();
+                        }
+                    } catch (e) {
+                        console.error("Failed to close the window: ", e);
+                    }
+                    if (count >= 3) {
+                        count = 0
+                        window.location.reload();
+                    }
+                    window.location.reload();
+                    //location.reload();
+                    break;
+            }
+        };
+
+    }, []);
+
 
     const handleScroll = () => {
         const scrollHeight = document.documentElement.scrollHeight;
         const scrollTop = document.documentElement.scrollTop;
         const clientHeight = document.documentElement.clientHeight;
 
-        if (!isLoading && scrollTop + clientHeight >= scrollHeight && visibleMovies < movieData.length) {
+        const movie_totla = movieData.filter((movie) => {
+            const currentTime = new Date().getTime();
+            const openDate = new Date(movie.openDate).getTime();
+            const expiredDate = new Date(movie.expiredDate).getTime();
+
+            return currentTime >= openDate && currentTime <= expiredDate;
+        })
+
+        if (!isLoading && scrollTop + clientHeight >= scrollHeight && visibleMovies < movie_totla.length) {
             setIsLoading(true);
             setTimeout(() => {
                 setVisibleMovies(visibleMovies + 6);
                 setIsLoading(false);
             }, 500); // Simulate loading time
-        } else if (visibleMovies >= movieData.length) {
+        } else if (visibleMovies >= movie_totla.length) {
             if (window.pageYOffset + window.innerHeight >= document.body.offsetHeight) {
                 setShowNoMoreContent(true);
             } else {
@@ -64,7 +159,7 @@ export default function Video() {
         const movie = findMovieByKey("title", title, movieData);
         if (movie) {
             setModalShow(true);
-            
+
             setModalTitle(`${movie.title} 【 全${movie.episodes} 集】`);
 
             // Create the episode buttons
@@ -72,7 +167,7 @@ export default function Video() {
             for (let i = 1; i <= movie.episodes; i++) {
                 const episodeLink = movie.linkTemplate.replace('?EP?', i.toString());
                 episodeButtons += `
-                <div class="movie_list_item"><a data-href="${episodeLink}"target="_blank"class="custom-btn btn-11"style="border: 1px dotted #3F51B5;color:white">第${i}集<div class="dot"></div></a></div>`;
+                <div class="movie_list_item"><a data-movie="${movie.title}" data-href="${episodeLink}"target="_blank"class="custom-btn btn-11"style="border: 1px dotted #3F51B5;color:white">第${i}集<div class="dot"></div></a></div>`;
             }
             episodeButtons += '</div>';
             setModalBody(episodeButtons);
@@ -80,9 +175,13 @@ export default function Video() {
             console.error(`No movie found with the title: ${title}`);
         }
     };
+
     return (
         <div>
-            <ToastContainer />
+            <ToastContainer
+                progressClassName="toastProgress"
+                bodyClassName="toastBody"
+            />
             <Modal
                 size="xl"
                 aria-labelledby="contained-modal-title-vcenter"
@@ -90,24 +189,25 @@ export default function Video() {
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 style={{
-                    color: 'black',
-                    display:"grid"
+                    display: "grid"
                 }}
             >
-                <Modal.Header className="d-flec justify-content-center">
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        { modalTitle }
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body dangerouslySetInnerHTML={{ __html: modalBody }}>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={() => setModalShow(false)}>關閉</Button>
-                </Modal.Footer>
+                <div style={{ background: "#4f545c" }}>
+                    <Modal.Header className="d-flex justify-content-center">
+                        <Modal.Title id="contained-modal-title-vcenter" className="font-weight-bolder">
+                            {modalTitle}
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body dangerouslySetInnerHTML={{ __html: modalBody }}>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={() => setModalShow(false)}>關閉</Button>
+                    </Modal.Footer>
+                </div>
             </Modal>
 
 
-            <h1>最近曾觀看(最近五部):</h1>
+            {/* <h1>最近曾觀看:</h1>
             {
                 movieData.filter((movie) => {
                     const currentTime = new Date().getTime();
@@ -134,8 +234,8 @@ export default function Video() {
                         </div>
                     );
                 })
-            }
-            <h1>精選劇集:</h1>
+            } */}
+            <h1 className="m-2">精選劇集:</h1>
             <main >
                 {movieData.filter((movie) => {
                     const currentTime = new Date().getTime();
@@ -221,25 +321,11 @@ export default function Video() {
                 <Accordion.Item eventKey="0">
                     <Accordion.Header>Accordion Item #1</Accordion.Header>
                     <Accordion.Body>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                        minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                        culpa qui officia deserunt mollit anim id est laborum.
                     </Accordion.Body>
                 </Accordion.Item>
                 <Accordion.Item eventKey="1">
                     <Accordion.Header>Accordion Item #2</Accordion.Header>
                     <Accordion.Body>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                        minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                        culpa qui officia deserunt mollit anim id est laborum.
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion> */}
