@@ -6,10 +6,12 @@ import { Button, Modal } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import $ from 'jquery';
-import Popper from 'popper.js';
+//import Popper from 'popper.js';
 import Not_found from '../../img/default_img.png'
 import { disableInteractions } from '../../js/disable';
 import { ToastContainer, toast } from 'react-toastify';
+import 'flag-icon-css/css/flag-icons.min.css';
+import Cookies from 'js-cookie';
 
 export default function Video() {
     const [visibleMovies, setVisibleMovies] = useState(12);
@@ -31,11 +33,16 @@ export default function Video() {
     useEffect(() => {
         let openedWindow;
         let is_clicked = false;
-        $(document).on("click", ".movie_list_item", function (event) {
+        $(document).on("click touchend", ".movie_list_item", function (event) {
             const childHref = event.target.getAttribute('data-href');
             const childTitle = event.target.getAttribute('data-movie');
             const movie = findMovieByKey("title", childTitle, movieData);
             if (movie && !is_clicked) {
+                var get_cookies = Cookies.get('recent_movies')
+                if (get_cookies) {
+                    var new_cookies = get_cookies + ',' + movie.title;
+                    Cookies.set('recent_movies', new_cookies)
+                }
                 is_clicked = true;
                 document.querySelector('html').style.pointerEvents = 'none';
                 var message =
@@ -67,6 +74,14 @@ export default function Video() {
                             }
                         }
                     },
+                });
+            } else {
+                var message =
+                    <div>
+                        發生錯誤，請重試
+                    </div>
+                toast.error(message, {
+                    autoClose: 1500
                 });
             }
         });
@@ -105,9 +120,9 @@ export default function Video() {
                     }
                     if (count >= 3) {
                         count = 0
-                        window.location.reload();
+                        //window.location.reload();
                     }
-                    window.location.reload();
+                    //window.location.reload();
                     //location.reload();
                     break;
             }
@@ -158,6 +173,16 @@ export default function Video() {
     const handleMovieBlockClick = (title) => {
         const movie = findMovieByKey("title", title, movieData);
         if (movie) {
+            if (movie.expiredDate > currentTime) {
+                var message =
+                    <div>
+                        劇集 【{ movie.title}】已過期
+                    </div>
+                toast.error(message, {
+                    autoClose: 1500
+                });
+                return
+            }
             setModalShow(true);
 
             setModalTitle(`${movie.title} 【 全${movie.episodes} 集】`);
@@ -172,7 +197,13 @@ export default function Video() {
             episodeButtons += '</div>';
             setModalBody(episodeButtons);
         } else {
-            console.error(`No movie found with the title: ${title}`);
+            var message =
+                <div>
+                    未找到標題為 {title} 的劇集，請重試
+                </div>
+            toast.error(message, {
+                autoClose: 1500
+            });
         }
     };
 
@@ -197,6 +228,7 @@ export default function Video() {
                         <Modal.Title id="contained-modal-title-vcenter" className="font-weight-bolder">
                             {modalTitle}
                         </Modal.Title>
+                        <button type="button" class="btn-close text-white" aria-label="Close" onClick={() => setModalShow(false)}></button>
                     </Modal.Header>
                     <Modal.Body dangerouslySetInnerHTML={{ __html: modalBody }}>
                     </Modal.Body>
@@ -205,36 +237,6 @@ export default function Video() {
                     </Modal.Footer>
                 </div>
             </Modal>
-
-
-            {/* <h1>最近曾觀看:</h1>
-            {
-                movieData.filter((movie) => {
-                    const currentTime = new Date().getTime();
-                    const openDate = new Date(movie.openDate).getTime();
-                    const expiredDate = new Date(movie.expiredDate).getTime();
-
-                    return currentTime >= openDate && currentTime <= expiredDate;
-                }).slice(0, visibleMovies).map((movie, index) => {
-                    return (
-                        <div
-                            key={index}
-                            className="col movie_list_item"
-                            onClick={() => handleMovieBlockClick(movie.title)}
-                        >
-                            <div className="movie-block">
-                                <div className="movie-poster">
-                                    <img src={movie.poster} alt={movie.title} />
-                                </div>
-                                <div className="movie-info">
-                                    <h3>{movie.title}</h3>
-                                    <p>{movie.description}</p>
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })
-            } */}
             <h1 className="m-2">精選劇集:</h1>
             <main >
                 {movieData.filter((movie) => {
@@ -255,15 +257,45 @@ export default function Video() {
                                     e.currentTarget.src = { Not_found };
                                 }}
                             />
+                            {(() => {
+                                const createDate = new Date(movie.createDate).getTime();
+                                const editDate = new Date(movie.editDate).getTime();
+                                if (86400000 * 3 > currentTime - editDate) {
+                                    return (
+                                        <span className="new_release" style={{ letterSpacing: 0 }}>
+                                            已更新<i className="new_release_icon fa-solid fa-bullhorn"></i>
+                                        </span>
+                                    );
+                                }
+                                if (86400000 * 3 > currentTime - createDate) {
+                                    return (
+                                        <div class="new-sticker">
+                                            <span class="sticker"></span>
+                                            <span class="new">新!</span>
+                                            <i class='new_release_icon fa-solid fa-bullhorn'></i>
+                                        </div>
+                                    )
+                                }
+                            })()}
                         </div>
                         <div className="movie-info">
                             <h3>{movie.title}</h3>
                             <span >{movie.episodes} 集</span>
                         </div>
-                        <div className="release_date">
-                            開播時間: <span>{movie.openDate}</span>
+                        <div className="release_date" style={{ fontSize: "1.5rem" }}>
+                            
+                            {(() => {
+                                const openDate = new Date(movie.openDate).getTime();
+
+                                if (openDate - currentTime > 0) {
+                                    return (
+                                        <span>開播時間:{movie.openDate}</span>
+                                    );
+                                }
+                            })()}
+                            
                         </div>
-                        <div className="release_date">
+                        <div className="release_date"style={{fontSize:"1.5rem"}}>
 
                             到期時間: <span>
                                 {(() => {

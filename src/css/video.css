@@ -341,3 +341,75 @@ h1 {
   font-size: 1rem !important;
   font-weight: 1000;
 }
+
+/* New_release */
+/* New Sticker */
+.new-sticker {
+  margin: 0;
+  position: absolute;
+  display: inline-block;
+  top: 1em;
+  right: 2em;
+}
+
+.new {
+  background-color: orange;
+  color: #fff;
+  letter-spacing: .09em;
+  position: absolute;
+  left: .4em;
+  top: .2em;
+  transform: rotate(15deg);
+  align-items: center;
+  color: white;
+text-shadow: 0px 0px 5px #fff, 0px 0px 5px black;
+}
+
+.sticker {
+  height: 2.1em;
+  width: 2.1em;
+  background: orange;
+  position: absolute;
+}
+
+.sticker:before {
+  height: 2.1em;
+  width: 2.1em;
+  background: orange;
+  content: "";
+  position: absolute;
+  /* Rotate */
+  transform: rotate(30deg);
+}
+
+.sticker:after {
+  height: 2.1em;
+  width: 2.1em;
+  background: orange;
+  content: "";
+  position: absolute;
+  /* Rotate */
+  transform: rotate(-30deg);
+}
+
+.new_release {
+  font-size: 1.5rem;
+  color: white;
+  animation-name: glow;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  position: absolute;
+  top: .2rem;
+  right: .2rem;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0px 0px 5px #fff, 0px 0px 5px #614ad3;
+  }
+
+  to {
+    text-shadow: 0px 0px 20px #fff, 0px 0px 20px #614ad3;
+  }
+}
