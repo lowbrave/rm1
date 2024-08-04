@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function NotFound() {
     const navigate = useNavigate();
@@ -21,10 +21,6 @@ function NotFound() {
     const textStyle = {
         fontSize: '1.5rem',
         marginBottom: '2rem',
-    };
-
-    const imageStyle = {
-        width: '300px',
     };
 
     const redirect = () => {

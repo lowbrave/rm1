@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import movieData from '../videos.json';
 import '../../css/material-kit.css';
 import '../../css/video.css';
@@ -76,11 +76,11 @@ export default function Video() {
                     },
                 });
             } else {
-                var message =
+                var error_msg =
                     <div>
                         發生錯誤，請重試
                     </div>
-                toast.error(message, {
+                toast.error(error_msg, {
                     autoClose: 1500
                 });
             }
@@ -173,10 +173,20 @@ export default function Video() {
     const handleMovieBlockClick = (title) => {
         const movie = findMovieByKey("title", title, movieData);
         if (movie) {
-            if (movie.expiredDate > currentTime) {
+            if (new Date(movie.expiredDate).getTime() < currentTime) {
                 var message =
                     <div>
                         劇集 【{ movie.title}】已過期
+                    </div>
+                toast.error(message, {
+                    autoClose: 1500
+                });
+                return
+            }
+            if (new Date(movie.openDate).getTime() > currentTime) {
+                var message =
+                    <div>
+                        劇集 【{movie.title}】尚未開播
                     </div>
                 toast.error(message, {
                     autoClose: 1500
@@ -197,14 +207,19 @@ export default function Video() {
             episodeButtons += '</div>';
             setModalBody(episodeButtons);
         } else {
-            var message =
+            var error_msg =
                 <div>
                     未找到標題為 {title} 的劇集，請重試
                 </div>
-            toast.error(message, {
+            toast.error(error_msg, {
                 autoClose: 1500
             });
         }
+    };
+
+    const formatOpenDate = (openDateString) => {
+        const openDate = new Date(openDateString);
+        return `${openDate.getFullYear()}-${String(openDate.getMonth() + 1).padStart(2, '0')}-${String(openDate.getDate()).padStart(2, '0')}`;
     };
 
     return (
@@ -240,11 +255,14 @@ export default function Video() {
             <h1 className="m-2">精選劇集:</h1>
             <main >
                 {movieData.filter((movie) => {
-                    const currentTime = new Date().getTime();
                     const openDate = new Date(movie.openDate).getTime();
                     const expiredDate = new Date(movie.expiredDate).getTime();
+                    const threeDaysInMs = 3 * 24 * 60 * 60 * 1000; // 3 days in milliseconds
 
-                    return currentTime >= openDate && currentTime <= expiredDate;
+                    return (
+                        (currentTime >= openDate && currentTime <= expiredDate) ||
+                        (currentTime + threeDaysInMs >= openDate && currentTime <= openDate)
+                    );
                 }).slice(0, visibleMovies).map((movie, index) => (
                     <div className="movie" onClick={() => handleMovieBlockClick(movie.title)} key={index}>
                         <div className="img_container">
@@ -260,6 +278,15 @@ export default function Video() {
                             {(() => {
                                 const createDate = new Date(movie.createDate).getTime();
                                 const editDate = new Date(movie.editDate).getTime();
+                                const openDate = new Date(movie.openDate).getTime();
+
+                                if (openDate - currentTime > 0) {
+                                    return (
+                                        <span className="new_release" style={{ letterSpacing: 0 }}>
+                                            即將上映<i className="new_release_icon fa-solid fa-bullhorn"></i>
+                                        </span>
+                                    );
+                                }
                                 if (86400000 * 3 > currentTime - editDate) {
                                     return (
                                         <span className="new_release" style={{ letterSpacing: 0 }}>
@@ -289,7 +316,7 @@ export default function Video() {
 
                                 if (openDate - currentTime > 0) {
                                     return (
-                                        <span>開播時間:{movie.openDate}</span>
+                                        <span>開播時間:{formatOpenDate(movie.openDate)}</span>
                                     );
                                 }
                             })()}
@@ -301,8 +328,9 @@ export default function Video() {
                                 {(() => {
                                     const expiredDate = new Date(movie.expiredDate).getTime();
                                     const remainingTime = expiredDate - currentTime;
+                                    const openDate = new Date(movie.openDate).getTime();
 
-                                    if (remainingTime > 0) {
+                                    if (remainingTime > 0 && openDate - currentTime < 0) {
                                         const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
                                         const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                                         const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
@@ -312,6 +340,8 @@ export default function Video() {
                                                 {days}日 {hours}小時 {minutes}分鐘 {seconds}秒
                                             </span>
                                         );
+                                    } else if (openDate - currentTime > 0) {
+                                        return "尚未開播";
                                     } else {
                                         return "已到期";
                                     }

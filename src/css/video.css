@@ -186,7 +186,7 @@ main .movie:hover .overview {
 /* Load More 劇集 */
 .loading,
 .no-more-content {
-  border-radius: 10px;
+  border-radius: 0 10px 10px 0;
   position: fixed;
   top: 50%;
   transform: translate(50%);
@@ -338,8 +338,10 @@ h1 {
 }
 
 .toastBody {
-  font-size: 1rem !important;
-  font-weight: 1000;
+  font-size: 1.25rem !important;
+  font-weight: 1000 !important;
+  text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
+  color: var(--primary-color)!important;
 }
 
 /* New_release */
@@ -357,12 +359,13 @@ h1 {
   color: #fff;
   letter-spacing: .09em;
   position: absolute;
-  left: .4em;
-  top: .2em;
+  left: .2em;
+  top: .1em;
   transform: rotate(15deg);
   align-items: center;
   color: white;
-text-shadow: 0px 0px 5px #fff, 0px 0px 5px black;
+  text-shadow: 0px 0px 5px #fff, 0px 0px 5px black;
+  font-size: 1.2rem;
 }
 
 .sticker {
