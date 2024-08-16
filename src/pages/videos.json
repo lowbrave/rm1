@@ -1,5 +1,77 @@
 [
     {
+      "title": "度華年",
+      "language": "普通話",
+      "episodes": 21,
+      "expiredDate": "2025-01-10 18:00:00",
+      "createDate": "2024-12-01 18:00:00",
+      "editDate": "2024-06-25 18:00:00",
+      "openDate": "2024-12-01 00:00:00",
+      "linkTemplate": "https://chinaq.tv/xj/cn240626b/?EP?.html",
+      "image": "https://i0.xiaoyakankan.com/data/2407/0015/15734d.jpg",
+      "notAll": false
+    },
+    {
+      "title": "偷得將軍半日閑",
+      "language":"普通話",
+      "episodes":12,
+      "expiredDate":"2025-01-10 18:00:00",
+      "createDate": "2024-12-01 18:00:00",
+      "editDate":"2024-06-25 18:00:00",
+      "openDate": "2024-12-01 00:00:00",
+      "linkTemplate": "https://chinaq.tv/xj/cn240426b/?EP?.html",
+      "image":"https://cnys.tv/upload/vod/20240725-3/ee1bf9e2a83ec4570e10c1cbb11e62bb.jpg",
+      "notAll":false
+    },
+    {
+      "title": "四海重明",
+      "language":"普通話",
+      "episodes":12,
+      "expiredDate":"2025-01-10 18:00:00",
+      "createDate": "2024-12-01 18:00:00",
+      "editDate":"2024-06-25 18:00:00",
+      "openDate": "2024-12-01 00:00:00",
+      "linkTemplate": "https://pttplay.tw/vodplay/214380-3-?EP?.html",
+      "image":"https://img.avdb.me/chinaq/upload/vod/20240801-1/91f16e5b58a505fb1d761feedd7782be.jpg",
+      "notAll":false
+    },
+    {
+      "title": "拂玉鞍",
+      "language":"普通話",
+      "episodes":13,
+      "expiredDate":"2024-12-10 18:00:00",
+      "createDate": "2024-11-01 18:00:00",
+      "editDate":"2024-06-25 18:00:00",
+      "openDate": "2024-11-01 00:00:00",
+      "linkTemplate": "https://dramaq.xyz/cn/5641799/ep?EP?.html",
+      "image":"https://dramaq.xyz/uploads/l/5641799.jpg",
+      "notAll":false
+    },
+    {
+      "title": "天行健",
+      "language":"普通話",
+      "episodes":36,
+      "expiredDate":"2024-12-10 18:00:00",
+      "createDate": "2024-11-01 18:00:00",
+      "editDate":"2024-06-25 18:00:00",
+      "openDate": "2024-11-01 00:00:00",
+      "linkTemplate": "https://dramasq.biz/xj/cn240508e/?EP?.html",
+      "image":"https://www.m2077.com/upload/vod/20240509-1/8c9e42ef4bcad53f2a8ab8467e8a9199.jpg",
+      "notAll":false
+    },
+    {
+      "title": "大王別慌張",
+      "language":"普通話",
+      "episodes":14,
+      "expiredDate":"2024-12-10 18:00:00",
+      "createDate": "2024-11-01 18:00:00",
+      "editDate":"2024-06-25 18:00:00",
+      "openDate": "2024-11-01 00:00:00",
+      "linkTemplate": "https://dramasq.biz/xj/cn240224/?EP?.html",
+      "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiplH4Qnv1shP6A-9ZAM1f5a0IssYHZAWD2A&s",
+      "notAll":false
+    },
+    {
       "title": "窺探",
       "language":"韓語",
       "episodes":20,
@@ -70,6 +142,18 @@
     "linkTemplate": "https://777tv.tw/vodplay/134730-5-?EP?.html",
     "image":"https://img.avdb.me/chinaq/upload/vod/20221130-1/5e97456b6d6632bf901b0222a6c71293.jpg",
     "notAll":false
+  },
+  {
+    "title": "甄嬛傳",
+    "language": "普通話",
+    "episodes": 76,
+    "expiredDate": "2024-10-01 18:00:00",
+    "createDate": "2024-08-17 18:00:00",
+    "editDate": "2024-06-25 18:00:00",
+    "openDate": "2024-08-17 00:00:00",
+    "linkTemplate": "https://chinaq.tv/xj/zhenhuan/?EP?.html#1",
+    "image": "https://i0.xiaoyakankan.com/data/2206/0949/3ed06e.jpg",
+    "notAll": false
   },
   {
     "title": "墨雨雲間",

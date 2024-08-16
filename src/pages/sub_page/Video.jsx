@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import movieData from '../videos.json';
 import '../../css/material-kit.css';
 import '../../css/video.css';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Carousel, Card, Placeholder } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import $ from 'jquery';
@@ -12,6 +12,10 @@ import { disableInteractions } from '../../js/disable';
 import { ToastContainer, toast } from 'react-toastify';
 import 'flag-icon-css/css/flag-icons.min.css';
 import Cookies from 'js-cookie';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import { format } from 'date-fns';
+import { zhTW } from 'date-fns/locale';
 
 export default function Video() {
     const [visibleMovies, setVisibleMovies] = useState(12);
@@ -21,6 +25,21 @@ export default function Video() {
     const [modalShow, setModalShow] = useState(false);
     const [modalTitle, setModalTitle] = useState(null);
     const [modalBody, setModalBody] = useState(null);
+
+    const futureMoviesByMonth = useMemo(() => {
+        return movieData.reduce((result, movie) => {
+            const movieDate = new Date(movie.openDate);
+            if (movieDate > new Date()) {
+                const monthYear = `${format(movieDate, 'yy年MM月', { locale: zhTW })}`;
+                if (!result[monthYear]) {
+                    result[monthYear] = [];
+                }
+                result[monthYear].push(movie);
+            }
+            return result;
+        }, {});
+    }, [movieData]);
+
 
     useEffect(() => {
         disableInteractions();
@@ -76,13 +95,6 @@ export default function Video() {
                     },
                 });
             } else {
-                var error_msg =
-                    <div>
-                        發生錯誤，請重試
-                    </div>
-                toast.error(error_msg, {
-                    autoClose: 1500
-                });
             }
         });
         function closeAllOpenedWindows() {
@@ -176,7 +188,7 @@ export default function Video() {
             if (new Date(movie.expiredDate).getTime() < currentTime) {
                 var message =
                     <div>
-                        劇集 【{ movie.title}】已過期
+                        劇集 【{movie.title}】已過期
                     </div>
                 toast.error(message, {
                     autoClose: 1500
@@ -222,6 +234,12 @@ export default function Video() {
         return `${openDate.getFullYear()}-${String(openDate.getMonth() + 1).padStart(2, '0')}-${String(openDate.getDate()).padStart(2, '0')}`;
     };
 
+    const [index, setIndex] = useState(0);
+
+    const handleCarouselSelect = (selectedIndex) => {
+        setIndex(selectedIndex);
+    };
+
     return (
         <div>
             <ToastContainer
@@ -253,6 +271,29 @@ export default function Video() {
                 </div>
             </Modal>
             <h1 className="m-2">精選劇集:</h1>
+            {/* <Carousel className="carousel" fade activeIndex={index} onSelect={handleCarouselSelect} interval={4000}>
+                {Object.keys(futureMoviesByMonth)
+                    .sort()
+                    .map((monthYear, index) => (
+                        <Carousel.Item className={`catousel_item month-${index + 1}`}>
+                            <Card style={{ mixBlendMode: "difference", fontWeight: "1000", textAlign:'center' }}>
+                                <div className={`month-background `}>
+                                    {monthYear}
+                                </div>
+                                <Card.Title>即將於 {monthYear}上映的劇集:</Card.Title>
+                                <Card.Text>
+                                    <ul>
+                                        {futureMoviesByMonth[monthYear].map((movie, index) => (
+                                            <li style={{ listStyle: "none" }} key={index}>
+                                                {movie.title} ({movie.episodes}集)
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </Card.Text>
+                            </Card>
+                        </Carousel.Item>
+                    ))}
+            </Carousel> */}
             <main >
                 {movieData.filter((movie) => {
                     const openDate = new Date(movie.openDate).getTime();
@@ -310,7 +351,7 @@ export default function Video() {
                             <span >{movie.episodes} 集</span>
                         </div>
                         <div className="release_date" style={{ fontSize: "1.5rem" }}>
-                            
+
                             {(() => {
                                 const openDate = new Date(movie.openDate).getTime();
 
@@ -320,9 +361,9 @@ export default function Video() {
                                     );
                                 }
                             })()}
-                            
+
                         </div>
-                        <div className="release_date"style={{fontSize:"1.5rem"}}>
+                        <div className="release_date" style={{ fontSize: "1.5rem" }}>
 
                             到期時間: <span>
                                 {(() => {

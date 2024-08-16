@@ -28,7 +28,7 @@ main .movie {
   width: min(100%, 450px);
   margin: 10px;
   background-color: var(--secondary-color);
- /*  background: linear-gradient(180deg, #3F51B5, rgb(236 239 255)); */
+  /*  background: linear-gradient(180deg, #3F51B5, rgb(236 239 255)); */
   -webkit-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
   position: relative;
@@ -341,7 +341,7 @@ h1 {
   font-size: 1.25rem !important;
   font-weight: 1000 !important;
   text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
-  color: var(--primary-color)!important;
+  color: var(--primary-color) !important;
 }
 
 /* New_release */
@@ -414,5 +414,112 @@ h1 {
 
   to {
     text-shadow: 0px 0px 20px #fff, 0px 0px 20px #614ad3;
+  }
+}
+
+/* ********************** */
+
+.carousel{
+  font-weight: 1000;
+  font-size: 28px;
+  min-height: 300px;
+}
+
+.catousel_item {
+  width: 90%;
+  margin: auto;
+  color: black !important;
+}
+
+.month-background {
+  width: 100%;
+  min-height: 300px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5em;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.075);
+  text-shadow: 2px 10px 4px rgba(0, 0, 0, 0.5);
+}
+
+.month-1 {
+  background: linear-gradient(to right, #0033FF, #00CCFF);
+}
+
+.month-2 {
+  background: linear-gradient(to right, #00CCFF, #00FF66);
+}
+
+.month-3 {
+  background: linear-gradient(to right, #00FF66, #FFFF00);
+}
+
+.month-4 {
+  background: linear-gradient(to right, #FFFF00, #FF9900);
+}
+
+.month-5 {
+  background: linear-gradient(to right, #FF9900, #FF0033);
+}
+
+.month-6 {
+  background: linear-gradient(to right, #FF0033, #9900FF);
+}
+
+.month-7 {
+  background: linear-gradient(to right, #9900FF, #6600CC);
+}
+
+.month-8 {
+  background: linear-gradient(to right, #6600CC, #003366);
+}
+
+.month-9 {
+  background: linear-gradient(to right, #003366, #333399);
+}
+
+.month-10 {
+  background: linear-gradient(to right, #333399, #660033);
+}
+
+.month-11 {
+  background: linear-gradient(to right, #660033, #CC0066);
+}
+
+.month-12 {
+  background: linear-gradient(to right, #CC0066, #0033FF);
+}
+
+/* Marquee */
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee 20s linear infinite;
+}
+
+.marquee-item {
+  display: inline-block;
+  padding: 0 20px;
+  font-size: 24px;
+}
+
+.marquee-item svg {
+  margin-right: 10px;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-100%);
   }
 }
