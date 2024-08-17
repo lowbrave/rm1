@@ -134,7 +134,7 @@ export default function Video() {
                         count = 0
                         //window.location.reload();
                     }
-                    //window.location.reload();
+                    window.location.reload();
                     //location.reload();
                     break;
             }
