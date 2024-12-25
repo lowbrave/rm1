@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/rm1/static/css/main.e1d35034.css",
-    "main.js": "/rm1/static/js/main.e1ed6111.js",
+    "main.css": "/rm1/static/css/main.06673c70.css",
+    "main.js": "/rm1/static/js/main.eecbd04f.js",
     "static/js/453.2778500e.chunk.js": "/rm1/static/js/453.2778500e.chunk.js",
     "static/media/do.svg": "/rm1/static/media/do.3ecb625b75ec64be4376.svg",
     "static/media/christmas_pattern.png": "/rm1/static/media/christmas_pattern.df9d429b276cc66f3afe.png",
@@ -271,12 +271,12 @@
     "static/media/pl.svg": "/rm1/static/media/pl.cd835d05865e496ff6b8.svg",
     "static/media/de.svg": "/rm1/static/media/de.6435bf24d148ca7248e7.svg",
     "static/media/bd.svg": "/rm1/static/media/bd.0ad8c443ef4d47ea0497.svg",
-    "main.e1d35034.css.map": "/rm1/static/css/main.e1d35034.css.map",
-    "main.e1ed6111.js.map": "/rm1/static/js/main.e1ed6111.js.map",
+    "main.06673c70.css.map": "/rm1/static/css/main.06673c70.css.map",
+    "main.eecbd04f.js.map": "/rm1/static/js/main.eecbd04f.js.map",
     "453.2778500e.chunk.js.map": "/rm1/static/js/453.2778500e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e1d35034.css",
-    "static/js/main.e1ed6111.js"
+    "static/css/main.06673c70.css",
+    "static/js/main.eecbd04f.js"
   ]
 }
